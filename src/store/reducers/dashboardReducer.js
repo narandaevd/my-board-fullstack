@@ -7,7 +7,7 @@ const initialState = {
                 {
                     header: 'card1',
                     content: 'lorem',
-                    assignee: 'СУКА ТВАРЬ'
+                    assignee: 'Some assignee'
                 },
                 {
                     header: 'card2',
@@ -22,7 +22,7 @@ const initialState = {
                 {
                     header: 'card1',
                     content: 'lorem',
-                    assignee: 'СУКА ТВАРЬ'
+                    assignee: 'Some assignee'
                 },
             ] 
         },
@@ -32,7 +32,7 @@ const initialState = {
                 {
                     header: 'card1',
                     content: 'lorem',
-                    assignee: 'СУКА ТВАРЬ'
+                    assignee: 'Some assignee'
                 },
                 {
                     header: 'card2',
