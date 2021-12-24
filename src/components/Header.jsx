@@ -37,9 +37,6 @@ function Header() {
         <AppBar component='div' color='primary' position='static' sx={{marginBottom: '15px'}}>
             <Toolbar sx={{justifyContent: 'space-between'}}>
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
-                    <Box sx={{mr: '20px'}}>
-                        <Typography fontSize='30px'>Dashboard</Typography>
-                    </Box>
                     <Button 
                         sx={{
                             width: '50px',
@@ -49,6 +46,9 @@ function Header() {
                         <MenuIcon sx={{fontSize: '50px'}}
                         />
                     </Button>
+                    <Box sx={{ml: '20px'}}>
+                        <Typography fontSize='30px'>Dashboard</Typography>
+                    </Box>
                 </Box>
                 <Menu
                     anchorEl={anchorDashboardElement}

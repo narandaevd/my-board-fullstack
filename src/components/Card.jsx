@@ -26,20 +26,20 @@ const Assignee = styled.div`
     align-items: center;
 `
 
-function Card() {
+function Card(props) {
     return (
         <StyledCard>
             <Header>
                 <Typography fontWeight='bold' fontSize='large'>
-                    Learn Mobx-State-tree
+                    {props.header}
                 </Typography>
             </Header>
             <Content>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores perferendis reiciendis quasi mollitia sit saepe, molestiae at. Sapiente eveniet sed possimus et totam, nesciunt blanditiis incidunt obcaecati atque debitis dolore.
+                {props.content}
             </Content>
             <Assignee>
                 <AccountCircleIcon sx={{fontSize: '45px'}}/>
-                <Typography ml='10px'>Name Surname</Typography>
+                <Typography ml='10px'>{props.assignee}</Typography>
             </Assignee>
         </StyledCard>
     )
