@@ -3,7 +3,6 @@ import React from 'react'
 // Components
 import Header from './Header'
 import Dashboard from './Dashboard'
-
 import { createGlobalStyle } from 'styled-components';
 
 const Styles = createGlobalStyle`

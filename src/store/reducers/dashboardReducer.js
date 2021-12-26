@@ -1,3 +1,5 @@
+import { addAC } from "../actions/dashboardActions";
+
 const initialState = {
     id: -3,
     lists: [
@@ -12,7 +14,7 @@ const initialState = {
                 {
                     header: 'card2',
                     content: 'lorem',
-                    assignee: 'СУКА ТВАРЬ2'
+                    assignee: 'some Assignee2'
                 },
             ] 
         },
@@ -37,17 +39,17 @@ const initialState = {
                 {
                     header: 'card2',
                     content: 'lorem',
-                    assignee: 'СУКА ТВАРЬ2'
+                    assignee: 'some Assignee2'
                 },
                 {
                     header: 'card3',
                     content: 'lorem',
-                    assignee: 'СУКА ТВАРЬ2'
+                    assignee: 'some Assignee2'
                 },
                 {
                     header: 'card4',
                     content: 'lorem',
-                    assignee: 'СУКА ТВАРЬ2'
+                    assignee: 'some Assignee2'
                 },
             ] 
         },
@@ -60,6 +62,10 @@ const initialState = {
 
 function reducer(state = initialState, action) {
     switch (action.type) {
+        case 'ADD':
+            const newState = {...state};
+            newState.lists[action.listIndex].cards.push(action.data);
+            return {...newState};
         default:
             return state;
     }
@@ -73,7 +79,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onAdd: () => dispatch({type: 'ADD'}),
+        onAdd: (card, listIndex) => dispatch(addAC(card, listIndex)),
     }
 }
 

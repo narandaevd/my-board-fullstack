@@ -1,19 +1,17 @@
 import React from 'react'
 import List from './List'
-import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { mapDispatchToProps, mapStateToProps } from '../store/reducers/rootReducer'
 
 function Dashboard(props) {
-    console.log(props);
     return (
-        <React.Fragment>
+        <div>
             {
                 props.dashboard.lists.map((list, index) => (
-                    <List {...list}/>
+                    <List list={list} listIndex={index}/>
                 ))
             }
-        </React.Fragment>
+        </div>
     )
 }
 

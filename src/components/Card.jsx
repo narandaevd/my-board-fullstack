@@ -31,18 +31,18 @@ function Card(props) {
         <StyledCard>
             <Header>
                 <Typography fontWeight='bold' fontSize='large'>
-                    {props.header}
+                    {props.card.header}
                 </Typography>
             </Header>
             <Content>
-                {props.content}
+                {props.card.content}
             </Content>
             <Assignee>
                 <AccountCircleIcon sx={{fontSize: '45px'}}/>
-                <Typography ml='10px'>{props.assignee}</Typography>
+                <Typography ml='10px'>{props.card.assignee}</Typography>
             </Assignee>
         </StyledCard>
     )
 }
 
-export default Card
+export default Card;
