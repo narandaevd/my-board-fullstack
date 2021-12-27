@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
-import { CircularProgress, AppBar, Toolbar, Menu, MenuItem, Button, Typography, Box } from '@mui/material';
+import { CircularProgress, AppBar, Toolbar, Menu, MenuItem, Button, Typography, Box, Avatar } from '@mui/material';
 import '@fontsource/roboto/500.css';
 import { mapStateToProps, mapDispatchToProps } from '../store/reducers/rootReducer';
 import { connect } from 'react-redux';
@@ -99,18 +99,20 @@ function Header(props) {
                         {
                             _.isEmpty(props.userData) ? null
                             : (
-                                <Typography fontSize='20px'>{`${props.userData.name} ${props.userData.surname}`}</Typography>
+                                <Typography sx={{textTransform: 'none'}} fontSize='20px'>{`${props.userData.name} ${props.userData.surname}`}</Typography>
                             )
                         }
                     </Button>
                     <Menu 
-                        sx={{p: '10px'}}
+                        sx={{padding: '20px'}}
                         anchorEl={anchorAccountElement}
                         open={Boolean(anchorAccountElement)}
                         onClose={ToggleAccountMenuMode}
-                        >
-                        <MenuItem>Profile</MenuItem>
-                        <MenuItem>Exit</MenuItem>
+                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                    >
+                        <MenuItem><Avatar sx={{marginRight: '10px'}}/><Typography fontSize='20px'>Profile</Typography></MenuItem>
+                        <MenuItem><Typography fontSize='20px'>Exit</Typography></MenuItem>
                     </Menu>
                 </Box>
             </Toolbar>

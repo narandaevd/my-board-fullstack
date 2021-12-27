@@ -1,7 +1,6 @@
 import '@fontsource/roboto/300.css';
 import styled from 'styled-components';
-import { Typography } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Typography, Avatar } from '@mui/material';
 
 const StyledCard = styled.div`
     background-color: white;
@@ -38,7 +37,7 @@ function Card(props) {
                 {props.card.content}
             </Content>
             <Assignee>
-                <AccountCircleIcon sx={{fontSize: '45px'}}/>
+                <Avatar />
                 <Typography ml='10px'>{props.card.assignee}</Typography>
             </Assignee>
         </StyledCard>
