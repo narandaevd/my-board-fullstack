@@ -75,6 +75,9 @@ function List(props) {
         reset({});
     };
 
+    const closeModal = () => setIsModalOpened(() => false);
+    const openModal = () => setIsModalOpened(() => true);
+
     return (
         <StyledList>
             <ListHeader>
@@ -86,23 +89,23 @@ function List(props) {
             <ListContent>
                 {
                     props.list.cards.map((card, index) => (
-                        <Card card={card} listIndex={props.listIndex} cardIndex={index}/>
+                        <Card card={card} listIndex={props.listIndex} cardIndex={index} key={index}/>
                     ))
                 }
             </ListContent>
             <Button 
-                onClick={() => setIsModalOpened(() => true)}
+                onClick={openModal}
                 sx={{marginBottom: '5px', marginTop: '-10px'}}
                 variant='text'>
                 ADD
             </Button>
             <Modal
                 open={isModalOpened}
-                onClose={() => setIsModalOpened(() => false)}
+                onClose={closeModal}
             >
                 <Box sx={style}>
                     <StyledForm onSubmit={handleSubmit(onSubmit)}>
-                    <Button variant='outlined' color='error' sx={{alignSelf: 'end'}}>X</Button>
+                    <Button variant='outlined' color='error' sx={{alignSelf: 'end'}} onClick={closeModal}>X</Button>
                         <StyledTypography mt='15px' >Title</StyledTypography>
                         <StyledInput type="text" {...register('header')}/>
                         <StyledTypography mt='15px' >Content</StyledTypography>

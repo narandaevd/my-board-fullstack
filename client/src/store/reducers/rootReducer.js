@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import dashboardReducer from './dashboardReducer'
 import { mapStateToProps as mapDashboardStateToProps, mapDispatchToProps as mapDashboardDispatchToProps } from './dashboardReducer' 
 const rootReducer = combineReducers({
-    dashboard: dashboardReducer,
+    userData: dashboardReducer,
 })
 
 function mapStateToProps(state) {

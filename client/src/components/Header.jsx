@@ -1,24 +1,32 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, Toolbar, Menu, MenuItem, Button, Typography, Box } from '@mui/material';
-
+import { CircularProgress, AppBar, Toolbar, Menu, MenuItem, Button, Typography, Box } from '@mui/material';
+import '@fontsource/roboto/500.css';
+import { mapStateToProps, mapDispatchToProps } from '../store/reducers/rootReducer';
+import { connect } from 'react-redux';
+import _ from 'lodash'
+import styled from 'styled-components'
 import '@fontsource/roboto/500.css';
 
-// !!!
-const MenuItems = [
-    'text1',
-    'text2',
-    'text3',
-    'text4',
-]
+const ProgressWrap = styled(Box)`
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 20px;
+`
 
-function Header() {
+function Header(props) {
 
     const [anchorDashboardElement, setAnchorDashboardElement] = useState(null);
-    const [selectedItemIndex, setSelectedItemIndex] = useState(0);
+    const [selectedDashboardId, setSelectedDashboardId] = useState(0);
 
     const [anchorAccountElement, setAnchorAccountElement] = useState(null);
+
+    useEffect(() => {
+        props.onChangeDashboard(selectedDashboardId);
+    }, [selectedDashboardId])
 
     function ToggleDashboardMenuMode(event) {
         setAnchorDashboardElement((anchorDashboardElement === null) ? event.currentTarget : null);
@@ -29,7 +37,7 @@ function Header() {
     }
 
     function ChangeSelectedItem(index) {
-        setSelectedItemIndex(() => index);
+        setSelectedDashboardId(() => index);
         ToggleDashboardMenuMode();
     }
 
@@ -57,26 +65,43 @@ function Header() {
                     >
                     <Box sx={{p: '10px'}}>
                         <Box sx={{mb: '10px'}}>
-                            <Typography>
-                                Your boards
+                            <Typography sx={{marginX: '5px', fontWeight: 'bold', fontSize: '20px'}}>
+                                Your dashboards
                             </Typography>
                         </Box>
                         {
-                            MenuItems.map((item, index) => ( 
-                                <MenuItem 
-                                    key={index} 
-                                    selected={index === selectedItemIndex}
-                                    onClick={() => ChangeSelectedItem(index)}>
-                                    {item}
-                                </MenuItem>
-                            ))
+                            _.isEmpty(props.userData) ? (
+                                <ProgressWrap>
+                                    <CircularProgress size={30}/>
+                                </ProgressWrap>
+                            ) 
+                            : (
+                                props.userData.dashboards
+                                    .map((dashboard) => dashboard.title)  
+                                    .map((item, index) => ( 
+                                    <MenuItem 
+                                        key={index} 
+                                        selected={index === selectedDashboardId}
+                                        onClick={() => ChangeSelectedItem(index)}
+                                    >
+                                        <Box sx={{margin: '0 auto'}}>
+                                            <Typography>{item}</Typography>
+                                        </Box>
+                                    </MenuItem>
+                                ))
+                            )
                         }
                     </Box>
                 </Menu>
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
                     <Button sx={{color: 'white'}} onClick={ToggleAccountMenuMode}>
                         <AccountCircleIcon sx={{color: 'white', fontSize: '50px', mr: '5px'}}/>
-                        <Typography fontSize='20px'>Name</Typography>
+                        {
+                            _.isEmpty(props.userData) ? null
+                            : (
+                                <Typography fontSize='20px'>{`${props.userData.name} ${props.userData.surname}`}</Typography>
+                            )
+                        }
                     </Button>
                     <Menu 
                         sx={{p: '10px'}}
@@ -93,4 +118,4 @@ function Header() {
     )
 }
 
-export default Header
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
