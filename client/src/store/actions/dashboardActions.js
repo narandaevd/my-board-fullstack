@@ -1,14 +1,19 @@
+const API = require('./../../API')
+
 export const addAC = (card, listIndex) => ({
     type: 'ADD',
     listIndex,
     data: card,
 })
 
-export const changeDashboardAC = (id) => ({
-    type: 'CHANGE_DASHBOARD',
-    id,
+export const pushCardAC = (dashboardId, listId, data) => ({
+    type: 'PUSH_CARD',
+    dashboardId, listId,
+    data,
 })
 
-export const startLoadAC = () => (dispatch) => fetch('http://127.0.0.1:5000/api/user/0/data')
-    .then(response => response.json())
-    .then(json => dispatch( {type: 'START_LOAD', data: json} ))
+export const startLoadAC = (id) => (dispatch) => {
+    fetch(API.getUserdataById(id))
+        .then(response => response.json())
+        .then(json => dispatch( {type: 'START_LOAD', data: json} ))   
+}

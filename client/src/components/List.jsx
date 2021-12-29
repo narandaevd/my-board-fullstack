@@ -3,11 +3,13 @@ import { Button, Typography, Modal, Box } from '@mui/material'
 import styled from 'styled-components'
 import Card from './Card'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import {useState} from 'react'
+import {useState, useContext} from 'react'
 import { mapStateToProps } from '../store/reducers/rootReducer';
 import { mapDispatchToProps } from '../store/reducers/rootReducer';
 import { connect } from 'react-redux'
 import { useForm } from 'react-hook-form';
+import API from '../API'
+import UserContext from '../contexts/UserContext';
 
 const ListHeader = styled.div`
     display: flex;
@@ -66,13 +68,19 @@ const StyledInput = styled.input`
 `
 
 function List(props) {
-
     const [isModalOpened, setIsModalOpened] = useState(false);
+
+    const [loggedIn, setLoggedIn, 
+        currentDashboardId, setCurrentDashboardId, 
+        currentUserId, setCurrentUserId]= useContext(UserContext);
+
     const {register, handleSubmit, errors, reset} = useForm();
-    const onSubmit = (data) => {
-        props.onAdd(data, props.listIndex); 
+    const onSubmit = async (data) => { 
         setIsModalOpened(() => false); 
+        props.onPushCard(currentDashboardId, props.listIndex, data);
         reset({});
+        /// !!! ПОСЛЕ AWAIT ПОЧЕМУ ТО НЕ ВЫПОЛНЯЕТСЯ КОД
+        const response = await fetch(API.getPushUrl(currentUserId, currentDashboardId, props.listIndex, props.list.cards.length), API.getPushOptions(data))
     };
 
     const closeModal = () => setIsModalOpened(() => false);

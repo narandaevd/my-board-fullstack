@@ -1,6 +1,8 @@
 import '@fontsource/roboto/300.css';
 import styled from 'styled-components';
-import { Typography, Avatar } from '@mui/material';
+import { Typography, Avatar, Button, Box } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 const StyledCard = styled.div`
     background-color: white;
@@ -25,6 +27,12 @@ const Assignee = styled.div`
     align-items: center;
 `
 
+const ButtonWrap = styled(Box)`
+    display: flex;
+    margin-top: 15px;
+    justify-content: space-between;
+`
+
 function Card(props) {
     return (
         <StyledCard>
@@ -40,6 +48,10 @@ function Card(props) {
                 <Avatar />
                 <Typography ml='10px'>{props.card.assignee}</Typography>
             </Assignee>
+            <ButtonWrap>
+                <Button variant='outlined' color='info'><EditIcon /></Button>
+                <Button variant='outlined' color='error'><DeleteForeverIcon /></Button>
+            </ButtonWrap>
         </StyledCard>
     )
 }
