@@ -3,6 +3,11 @@ import styled from 'styled-components';
 import { Typography, Avatar, Button, Box } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import UserContext from '../contexts/UserContext';
+import {useContext} from 'react';
+import { connect } from 'react-redux';
+import { mapDispatchToProps, mapStateToProps } from '../store/reducers/rootReducer';
+import API from '../API'
 
 const StyledCard = styled.div`
     background-color: white;
@@ -34,6 +39,15 @@ const ButtonWrap = styled(Box)`
 `
 
 function Card(props) {
+
+    const [loggedIn, setLoggedIn, 
+        currentDashboardId, setCurrentDashboardId, 
+        currentUserId, setCurrentUserId] = useContext(UserContext);
+
+    async function handleDelete() {
+        props.onDeleteCard(currentUserId, currentDashboardId, props.listId, props.cardId);
+    }
+
     return (
         <StyledCard>
             <Header>
@@ -49,11 +63,17 @@ function Card(props) {
                 <Typography ml='10px'>{props.card.assignee}</Typography>
             </Assignee>
             <ButtonWrap>
-                <Button variant='outlined' color='info'><EditIcon /></Button>
-                <Button variant='outlined' color='error'><DeleteForeverIcon /></Button>
+                <Button variant='outlined' color='info'>
+                    <EditIcon />
+                </Button>
+                <Button variant='outlined' 
+                    color='error' 
+                    onClick={handleDelete}>
+                    <DeleteForeverIcon />
+                </Button>
             </ButtonWrap>
         </StyledCard>
     )
 }
 
-export default Card;
+export default connect(mapStateToProps, mapDispatchToProps)(Card);

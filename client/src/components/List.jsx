@@ -1,5 +1,5 @@
 import '@fontsource/roboto/400.css';
-import { Button, Typography, Modal, Box } from '@mui/material'
+import { Button, Typography, Modal, Box, Menu, MenuItem } from '@mui/material'
 import styled from 'styled-components'
 import Card from './Card'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -10,6 +10,10 @@ import { connect } from 'react-redux'
 import { useForm } from 'react-hook-form';
 import API from '../API'
 import UserContext from '../contexts/UserContext';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DoneIcon from '@mui/icons-material/Done';
 
 const ListHeader = styled.div`
     display: flex;
@@ -27,103 +31,112 @@ const ListContent = styled.div`
 const StyledList = styled.div`
     display: inline-block;
     vertical-align: top;
-    width: 400px;
+    width: 300px;
     margin: 10px;
     box-shadow: 0px 0px 14px 0px rgba(50, 50, 50, 0.41);
     border-radius: 5px 5px 5px 5px;
     background-color: #F0F0EF;
 `
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'white',
-    boxShadow: 24,
-    borderRadius: '5px',
-    pt: 2,
-    px: 4,
-    pb: 3,
-};
-
-const StyledTypography = styled(Typography)`
-    font-weight: normal;
-    font-size: 25px;
-    text-align: center;
-`
-
 const StyledForm = styled.form`
     display: flex;
+    width: 300px;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 `
 
 const StyledInput = styled.input`
+    margin-top: 10px;
+    width: 100%;
     height: 30px;
-    margin-top: 15px;
-    width: 80%;
+    padding: 0 0 0 5px;
 `
 
 function List(props) {
-    const [isModalOpened, setIsModalOpened] = useState(false);
 
     const [loggedIn, setLoggedIn, 
         currentDashboardId, setCurrentDashboardId, 
         currentUserId, setCurrentUserId]= useContext(UserContext);
 
-    const {register, handleSubmit, errors, reset} = useForm();
-    const onSubmit = async (data) => { 
-        setIsModalOpened(() => false); 
-        props.onPushCard(currentDashboardId, props.listIndex, data);
-        reset({});
-        /// !!! ПОСЛЕ AWAIT ПОЧЕМУ ТО НЕ ВЫПОЛНЯЕТСЯ КОД
-        const response = await fetch(API.getPushUrl(currentUserId, currentDashboardId, props.listIndex, props.list.cards.length), API.getPushOptions(data))
-    };
+    const [anchorMenuListEl, setAnchorMenuListEl] = useState(null);
 
-    const closeModal = () => setIsModalOpened(() => false);
-    const openModal = () => setIsModalOpened(() => true);
+    const [anchorAddButtonEl, setAnchorAddButtonEl] = useState(null);
+
+    function ToggleAnchorAddButtonEl(e) {
+        if (e)
+            setAnchorAddButtonEl(() => (anchorAddButtonEl === null) ? e.currentTarget : null);
+        else
+            setAnchorAddButtonEl(() => null);
+    }
+
+    const openMenu = (e) => setAnchorMenuListEl(e.currentTarget);
+    const closeMenu = (e) => setAnchorMenuListEl(null);
+    function handleDeleteList() {
+        closeMenu();
+        props.onDeleteList(currentUserId, currentDashboardId, props.listId);
+    }
+
+    const {register, handleSubmit, errors, reset} = useForm();
+    const onSubmit = (data) => { 
+        ToggleAnchorAddButtonEl(); 
+        reset({header: '', content: '', assignee: ''});
+        props.onPushCard(currentUserId, currentDashboardId, props.listId, data);
+    };
+    const handleCloseAddCardMenu = (e) => {ToggleAnchorAddButtonEl(e); reset({header: '', content: '', assignee: ''})};
 
     return (
         <StyledList>
             <ListHeader>
                 <Typography fontSize='25px' ml='5px'>{props.list.name}</Typography>
-                <Button color='info'>
+                <Button color='info' onClick={openMenu}>
                     <MoreHorizIcon />
                 </Button>
+                <Menu
+                    open={Boolean(anchorMenuListEl)}
+                    anchorEl={anchorMenuListEl}
+                    onClose={closeMenu}
+                >
+                    <MenuItem onClick={() => {}}>
+                        <EditIcon />
+                        <Typography ml='5px'>Edit</Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleDeleteList}>
+                        <DeleteForeverIcon />
+                        <Typography ml='5px'>Delete</Typography>
+                    </MenuItem>
+                </Menu>
             </ListHeader>
             <ListContent>
                 {
                     props.list.cards.map((card, index) => (
-                        <Card card={card} listIndex={props.listIndex} cardIndex={index} key={index}/>
+                        <Card card={card} listId={props.listId} cardId={index} key={index}/>
                     ))
                 }
             </ListContent>
             <Button 
-                onClick={openModal}
+                onClick={ToggleAnchorAddButtonEl}
                 sx={{marginBottom: '5px', marginTop: '-10px'}}
                 variant='text'>
-                ADD
+                Add
             </Button>
-            <Modal
-                open={isModalOpened}
-                onClose={closeModal}
+            <Menu
+                sx={{marginTop: '15px'}}
+                anchorEl={anchorAddButtonEl}
+                open={Boolean(anchorAddButtonEl)}
+                onClose={ToggleAnchorAddButtonEl}
             >
-                <Box sx={style}>
-                    <StyledForm onSubmit={handleSubmit(onSubmit)}>
-                    <Button variant='outlined' color='error' sx={{alignSelf: 'end'}} onClick={closeModal}>X</Button>
-                        <StyledTypography mt='15px' >Title</StyledTypography>
-                        <StyledInput type="text" {...register('header')}/>
-                        <StyledTypography mt='15px' >Content</StyledTypography>
-                        <StyledInput type="text" {...register('content')}/>
-                        <StyledTypography mt='15px' >Assignee</StyledTypography>
-                        <StyledInput type="text" {...register('assignee')}/>
-                        <Button variant='outlined' color='success' type='submit' sx={{width: '120px', marginTop: '30px'}}>Отправить</Button>
-                    </StyledForm>
-                </Box>
-            </Modal>
+                <StyledForm onSubmit={handleSubmit(onSubmit)}>
+                    <StyledInput autoComplete='off' placeholder={'Input header...'} type="text" {...register('header')}/>
+                    <StyledInput autoComplete='off' placeholder={'Input content...'} type="text" {...register('content')}/>
+                    <StyledInput autoComplete='off' placeholder={'Input assignee...'} type="text" {...register('assignee')}/>
+                    <Box sx={{width: '100%', display: 'flex', justifyContent: 'space-around'}}>
+                        <Button color='success' type='submit'><DoneIcon /></Button>
+                        <Button color='error' onClick={handleCloseAddCardMenu}><CloseIcon /></Button>
+                    </Box>
+                </StyledForm>
+            </Menu>
         </StyledList>
     )
 }

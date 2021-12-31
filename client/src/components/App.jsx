@@ -10,6 +10,7 @@ import UserContext from '../contexts/UserContext';
 import Header from './Header'
 import Dashboard from './Dashboard'
 import AuthForm from './AuthForm';
+import RegisterForm from './RegisterForm'
 
 const Styles = createGlobalStyle`
   * {
@@ -22,19 +23,19 @@ const Styles = createGlobalStyle`
   }
 `
 
-function useUser() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [currentDashboardId, setCurrentDashboardId] = useState(-1);
-  const [currentUserId, setCurrentUserId] = useState(-1);
+function useAuth() {
+  const [loggedIn, setLoggedIn] = useState(true);
+  const [currentDashboardId, setCurrentDashboardId] = useState(0);
+  const [currentUserId, setCurrentUserId] = useState(1);
   return [loggedIn, setLoggedIn, currentDashboardId, setCurrentDashboardId, currentUserId, setCurrentUserId];
 }
 
 function App(props) {
-
-  // Авторизован ли пользователь - глобальное состояние
-  const [loggedIn, setLoggedIn, 
-    currentDashboardId, setCurrentDashboardId, 
-    currentUserId, setCurrentUserId] = useUser();
+  // Глобальное состояние несущее в себе информацию о том
+  // Залогинился ли пользователь, id текущей доски и id текущего юзера
+  const [loggedIn, setLoggedIn,
+    currentDashboardId, setCurrentDashboardId,
+    currentUserId, setCurrentUserId] = useAuth();
 
   // Начальная загрузка информации пользователя
   useEffect(() => {
@@ -48,6 +49,7 @@ function App(props) {
         <Routes>
           <Route path={'/'} element={<><Styles /><Header /><Dashboard/></>} exact/>
           <Route path={'/auth'} element={<AuthForm/>} exact/>
+          <Route path={'/register'} element={<RegisterForm/>} exact/>
         </Routes>
     </UserContext.Provider>
   );

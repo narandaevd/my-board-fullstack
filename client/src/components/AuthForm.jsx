@@ -1,6 +1,6 @@
 import {useContext, useState} from 'react';
 import UserContext from '../contexts/UserContext';
-import { Alert, Typography, Button } from '@mui/material'
+import { Alert, Typography, Button, Box } from '@mui/material'
 import {useForm} from 'react-hook-form'
 import styled from 'styled-components'
 import API from './../API'
@@ -29,6 +29,14 @@ const StyledInput = styled.input`
     width: 80%;
 `
 
+const ButtonWrap = styled(Box)`
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-around;
+`
+
 function AuthForm() {
     const [loggedIn, setLoggedIn, 
         currentDashboardId, setCurrentDashboardId, 
@@ -41,7 +49,7 @@ function AuthForm() {
     const successHelper = () => setIsOpenedHelper(() => false);
 
     const onSubmit = async (data) => {
-        const response = await fetch(API.getAuthUrl(), API.getAuthOptions(data)); 
+        const response = await fetch(API.auth.getUrl(), API.auth.getOptions(data)); 
         const json = await response.json();
         const body = json.body;
         if (body.isFounded === true) {
@@ -62,7 +70,10 @@ function AuthForm() {
             <StyledInput type="text" {...register('email')}/>
             <StyledTypography mt='15px' fontSize='20px'>Password</StyledTypography>
             <StyledInput type="text" {...register('password')}/>
-            <Button variant='outlined' color='success' type='submit' sx={{width: '120px', marginY: '30px'}}>Sign in</Button>
+            <ButtonWrap>
+                <Button variant='outlined' color='info' type='submit' sx={{width: '120px'}}>Sign in</Button>
+                <Button onClick={() => navigate('/register')} variant='outlined' color='info' type='submit' sx={{width: '120px'}}>Sign up</Button>
+            </ButtonWrap>
             {
                 (isOpenedHelper === null) ? (
                     null
