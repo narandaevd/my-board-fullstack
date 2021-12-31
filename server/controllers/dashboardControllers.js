@@ -7,9 +7,11 @@ async function pushDashboardController(req, res) {
     user.dashboards.push(data);
     user.save();
     res.status(201).send({
-        operation: 'push-dashboard',
-        isSuccess: true,
-        dashboard: data,
+        body: {
+            operation: 'push-dashboard',
+            isSuccess: true,
+            dashboard: data,
+        }
     })
 }
 
@@ -19,9 +21,12 @@ async function deleteDashboardController(req, res) {
     const removingDashboard = user.dashboards.splice(Number(dashboardId), 1);
     user.save();
     res.status(201).send({
-        operation: 'delete-dashboard',
-        isSuccess: true,
-        dashboard: removingDashboard,
+        body: {
+            operation: 'delete-dashboard',
+            isSuccess: true,
+            dashboard: removingDashboard,
+        }
+
     })
 }
 

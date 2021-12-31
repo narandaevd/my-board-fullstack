@@ -53,11 +53,11 @@ function AuthForm() {
         const json = await response.json();
         const body = json.body;
         if (body.isFounded === true) {
-            await setLoggedIn(() => true);
-            await setCurrentUserId(() => body.userId);
-            await setCurrentDashboardId(() => 0);
-            navigate('/');
             successHelper();
+            setLoggedIn(() => true);
+            setCurrentUserId(() => body.userId);
+            setCurrentDashboardId(() => 0);
+            navigate('/');
         } else 
             dangerHelper();
         reset({});
@@ -69,7 +69,7 @@ function AuthForm() {
             <StyledTypography mt='30px' fontSize='20px'>E-mail</StyledTypography>
             <StyledInput type="text" {...register('email')}/>
             <StyledTypography mt='15px' fontSize='20px'>Password</StyledTypography>
-            <StyledInput type="text" {...register('password')}/>
+            <StyledInput type="password" {...register('password')}/>
             <ButtonWrap>
                 <Button variant='outlined' color='info' type='submit' sx={{width: '120px'}}>Sign in</Button>
                 <Button onClick={() => navigate('/register')} variant='outlined' color='info' type='submit' sx={{width: '120px'}}>Sign up</Button>
@@ -80,7 +80,7 @@ function AuthForm() {
                 ) : (
                     (isOpenedHelper) ? (
                         <Alert variant='outlined' color='error'>
-                            Incorrect data
+                            Incorrect email or password
                         </Alert>
                     ) : (
                         <Alert variant='outlined' color='success'>

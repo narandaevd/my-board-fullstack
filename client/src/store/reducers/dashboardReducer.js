@@ -1,6 +1,6 @@
 import { startLoadAC, deleteCardAC, pushCardAC, deleteListAC, pushListAC, pushDashboardAC, deleteDashboardAC } from "../actions/dashboardActions";
 import { START_LOAD, DELETE_CARD, PUSH_CARD, DELETE_LIST, PUSH_LIST, PUSH_DASHBOARD, DELETE_DASHBOARD } from '../actions/dashboardActions'
-import API, { dashboard } from './../../API';
+import API from './../../API';
 
 const initialState = {};
 

@@ -14,7 +14,6 @@ const ListSchema = new Schema({
 
 const DashboardSchema = new Schema({
     title: String,
-    dashboardId: Number,
     lists: [ListSchema]
 })
 
